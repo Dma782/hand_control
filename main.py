@@ -2,8 +2,8 @@ import cv2
 
 from src.camera import open_camera, get_frame
 from src.hand_tracking import get_hand_landmarks, draw_hand_landmarks
-from src.gestures import determinate_gest_point_finger, click_l_r
-
+from src.controller import determinate_gest_point_finger, click_l_r, activity
+from src.controller_for_model import normalize_coords, determinate
 
 cap = open_camera()
 
@@ -25,6 +25,11 @@ while True:
 
     if left_hand:
         click_l_r(left_hand)
+
+        norm_coords = normalize_coords(left_hand)
+        class_gest = determinate(norm_coords)
+
+        activity(class_gest)
 
     cv2.imshow("Gesture Control", frame)
 
