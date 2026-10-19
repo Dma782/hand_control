@@ -65,36 +65,36 @@ def click_l_r(hand_landmarks):
     ring_touch_old = ring_touch
 
 last_action_time = 0
-cooldown = 1.0  # минимум 1 секунда между действиями
 previous_gesture = None
+cooldown = 1.0
 
 
 def activity(gesture):
     global last_action_time, previous_gesture
 
     current_time = time.time()
+
     if gesture is None:
         previous_gesture = None
         return
 
-    if gesture == previous_gesture:
-        return
+    if gesture == "fist":
+        if gesture != previous_gesture:
+            if current_time - last_action_time >= cooldown:
+                pyautogui.hotkey("alt", "tab")
+                last_action_time = current_time
 
-    if current_time - last_action_time < cooldown:
         previous_gesture = gesture
         return
 
-    if gesture == "fist":
-        pyautogui.hotkey("alt", "tab")
-
     elif gesture == "open_palm":
-        pyautogui.scroll(40)
+        if current_time - last_action_time >= 0.2:
+            pyautogui.scroll(40)
+            last_action_time = current_time
 
     elif gesture == "peace":
-        pyautogui.scroll(-40)
+        if current_time - last_action_time >= 0.2:
+            pyautogui.scroll(-40)
+            last_action_time = current_time
 
-    else:
-        return
-
-    last_action_time = current_time
     previous_gesture = gesture
