@@ -1,6 +1,6 @@
 import numpy as np
-from dataset import X_test, y_test
-from MLP import MLP
+from models.dataset import X_test, y_test
+from models.MLP import MLP
 
 model = MLP()
 

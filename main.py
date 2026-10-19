@@ -22,10 +22,9 @@ while True:
 
     if right_hand:
         determinate_gest_point_finger(right_hand)
+        click_l_r(right_hand)
 
     if left_hand:
-        click_l_r(left_hand)
-
         norm_coords = normalize_coords(left_hand)
         class_gest = determinate(norm_coords)
 

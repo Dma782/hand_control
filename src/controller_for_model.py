@@ -18,7 +18,16 @@ model.b3 = weights["b3"]
 class_names = ["fist", "open_palm", "peace"]
 
 
-def normalize_coords(coords):
+def normalize_coords(hand_landmarks):
+    coords = []
+
+    for landmark in hand_landmarks.landmark:
+        coords.extend([
+            landmark.x,
+            landmark.y,
+            landmark.z
+        ])
+
     if len(coords) != 63:
         return None
 
@@ -46,8 +55,7 @@ def normalize_coords(coords):
 
         normalized.extend([x, y, z])
 
-    return normalized
-
+    return np.array(normalized).reshape(1, 63)
 
 def determinate(coords):
     y_pred, _ = model.forward(coords)

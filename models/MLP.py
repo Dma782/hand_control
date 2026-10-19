@@ -1,5 +1,5 @@
 import numpy as np
-from dataset import X_train, y_train, X_val, y_val
+from models.dataset import X_train, y_train, X_val, y_val
 
 class MLP:
     def __init__(

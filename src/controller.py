@@ -31,25 +31,38 @@ def determinate_gest_point_finger(hand_landmarks):
     x_old = x
     y_old = y
 
+pinkie_touch_old = False
+ring_touch_old = False
+
+
 def click_l_r(hand_landmarks):
+    global pinkie_touch_old, ring_touch_old
+
     thumb = hand_landmarks.landmark[4]
+    ring = hand_landmarks.landmark[16]
+    pinkie = hand_landmarks.landmark[20]
 
-    point = hand_landmarks.landmark[8]
-    middle = hand_landmarks.landmark[12]
+    pinkie_dist = (
+        (thumb.x - pinkie.x) ** 2 +
+        (thumb.y - pinkie.y) ** 2
+    ) ** 0.5
 
-    x_thumb = thumb.x
-    y_thumb = thumb.y
+    ring_dist = (
+        (thumb.x - ring.x) ** 2 +
+        (thumb.y - ring.y) ** 2
+    ) ** 0.5
 
-    x_point = point.x
-    y_point = point.y
+    pinkie_touch = pinkie_dist < 0.05
+    ring_touch = ring_dist < 0.05
 
-    x_middle = middle.x
-    y_middle = middle.y
-
-    if ((x_thumb-x_point)**2 + (y_thumb-y_point)**2)**0.5 < 0.05:
+    if pinkie_touch and not pinkie_touch_old:
         pyautogui.click()
-    if ((x_thumb-x_middle)**2 + (y_thumb-y_middle)**2)**0.5 < 0.05:
+
+    if ring_touch and not ring_touch_old:
         pyautogui.rightClick()
+
+    pinkie_touch_old = pinkie_touch
+    ring_touch_old = ring_touch
 
 last_action_time = 0
 cooldown = 1.0  # минимум 1 секунда между действиями
@@ -75,10 +88,10 @@ def activity(gesture):
         pyautogui.hotkey("alt", "tab")
 
     elif gesture == "open_palm":
-        pyautogui.scroll(5)
+        pyautogui.scroll(40)
 
     elif gesture == "peace":
-        pyautogui.scroll(-5)
+        pyautogui.scroll(-40)
 
     else:
         return
