@@ -41,3 +41,21 @@ def draw_hand_landmarks(frame, hands_landmarks):
                 hand_landmarks,
                 mp_hands.HAND_CONNECTIONS
             )
+
+def get_left_landmarks_for_model(frame):
+    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    results = hands.process(frame_rgb)
+
+    if results.multi_hand_landmarks:
+            for hand_landmarks, handedness in zip(
+                results.multi_hand_landmarks,
+                results.multi_handedness
+            ):
+                hand_label = handedness.classification[0].label
+                if hand_label == 'Left':
+                    coords = []
+                    for landmark in hand_landmarks.landmark:
+                        coords.extend([landmark.x, landmark.y, landmark.z])
+                    return coords 
+    return []
+    
